@@ -1,3 +1,3 @@
-# VaporSitemap
+# Vapor Sitemap
 
 A description of this package.
