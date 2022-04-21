@@ -36,7 +36,7 @@ First, we need to create some functions to tell to the middleware what to do:
 The goal of this function is to tell the middleware if it should handle a path or not.
 A basic implementation is this one:
 
-```
+```swift
 func isSitemap(_ path: String) -> Bool {
     return path == "/sitemap.xml"
 }
