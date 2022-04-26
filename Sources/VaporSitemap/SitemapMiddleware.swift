@@ -21,12 +21,12 @@ import Vapor
 
 public class SitemapMiddleware: Middleware {
     
-    private let isSitemap: (String) -> Bool
-    private let generateURLs: (String) -> [SitemapURL]
+    private let isSitemap: (Request) -> Bool
+    private let generateURLs: (Request) -> [SitemapURL]
     
     public init(
-        isSitemap: @escaping (String) -> Bool,
-        generateURLs: @escaping (String) -> [SitemapURL]
+        isSitemap: @escaping (Request) -> Bool,
+        generateURLs: @escaping (Request) -> [SitemapURL]
     ) {
         self.isSitemap = isSitemap
         self.generateURLs = generateURLs
@@ -34,7 +34,7 @@ public class SitemapMiddleware: Middleware {
     
     public func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
         // Only handle if url corresponds to a sitemap
-        guard isSitemap(request.url.path) else {
+        guard isSitemap(request) else {
             return next.respond(to: request)
         }
         
@@ -49,7 +49,7 @@ public class SitemapMiddleware: Middleware {
                 stringLiteral: """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-                \(generateURLs(request.url.path).map(\.xml).joined(separator: "\n"))
+                \(generateURLs(request).map(\.xml).joined(separator: "\n"))
                 </urlset>
                 """
             )

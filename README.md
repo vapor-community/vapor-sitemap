@@ -31,14 +31,14 @@ let package = Package(
 
 First, we need to create some functions to tell to the middleware what to do:
 
-### `isSitemap(_ path: String) -> Bool`
+### `isSitemap(_ req: Request) -> Bool`
 
 The goal of this function is to tell the middleware if it should handle a path or not.
 A basic implementation is this one:
 
 ```swift
-func isSitemap(_ path: String) -> Bool {
-    return path == "/sitemap.xml"
+func isSitemap(_ req: Request) -> Bool {
+    return req.url.path == "/sitemap.xml"
 }
 ```
 
@@ -47,13 +47,13 @@ With this implementation, you tell to the middleware to handle only `/sitemap.xm
 In some cases, you may want to generate multiple sitemaps.
 To do so, just handle all the path you want in this function.
 
-### `generateURLs(_ path: String) -> [SitemapURL]`
+### `generateURLs(_ req: Request) -> [SitemapURL]`
 
 The goal of this function is to give all the URLs to put in the specified sitemap.
 An example implementation is this one:
 
 ```swift
-func generateURLs(_ path: String) -> [SitemapURL] {
+func generateURLs(_ req: Request) -> [SitemapURL] {
     let prefix = "https://www.example.com/"
     let paths = ["home", "page1", "folder/page2"]
         
